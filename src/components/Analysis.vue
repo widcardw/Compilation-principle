@@ -14,7 +14,7 @@ const analyze = () => {
 </script>
 
 <template>
-  <div style="display: flex; justify-content:first baseline;">
+  <div lg:flex lg:justify-center>
     <n-card title="输入代码">
       <template #header-extra>
         <n-button @click="analyze">分析</n-button>

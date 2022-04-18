@@ -11,6 +11,11 @@ const analyze = () => {
   lexicalResult.value = lexialAnalysisProcess(inputCode.value + '\n');
 }
 
+const tabKeyDown = (e: Event) => {
+  inputCode.value += '\t'
+  e.preventDefault();
+}
+
 </script>
 
 <template>
@@ -19,7 +24,8 @@ const analyze = () => {
       <template #header-extra>
         <n-button @click="analyze" :disabled="inputCode.trim() === ''">分析</n-button>
       </template>
-      <n-input v-model:value="inputCode" type="textarea" placeholder="请输入代码" clearable class="code" />
+      <n-input v-model:value="inputCode" type="textarea" placeholder="请输入代码" clearable class="code"
+        @keydown.tab="tabKeyDown" />
     </n-card>
     <n-card content-style="padding: 0;">
       <n-tabs type="line" size="large" :tabs-padding="20" pane-style="padding: 0;">

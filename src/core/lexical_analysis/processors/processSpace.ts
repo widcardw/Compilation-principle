@@ -5,7 +5,7 @@ const processSpace = (str: string, strIndex: number): LexicalResult => {
     let pr: LexicalResult = {
         value: "",
         strIndex: strIndex,
-        type: Token.UNKNOWN
+        type: Token.NONE
     }
     let ch = str.charAt(pr.strIndex)
     if (ch === ' ' || ch === '\t' || ch === '\n' || ch === '\r') {

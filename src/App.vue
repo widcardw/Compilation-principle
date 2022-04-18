@@ -5,20 +5,14 @@ import Analysis from './components/Analysis.vue'
 </script>
 
 <template>
-  <Analysis style="margin: 20px; width: calc(100%-40px);" />
-  <div m2 flex justify-center text-1xl hover="op80" op30 duration-300>
-    <a i-file-icons-vite text-zinc-600 href="https://vitejs.cn" target="_blank" m1></a>
-    <a i-file-icons-vue text-zinc-600 href="https://github.com/vuejs/vue" target="_blank" m1></a>
-    <a i-carbon-logo-github text-zinc-600 href="https://github.com/widcardw/Compilation-principle" target="_blank" m1></a>
+  <Analysis sm:m-4 />
+  <div m2 flex justify-center text-1xl hover="op80" op30 duration-300 space-x-2 my-4>
+    <a i-file-icons-vite text-zinc-600 href="https://vitejs.cn" target="_blank"></a>
+    <a i-file-icons-vue text-zinc-600 href="https://github.com/vuejs/vue" target="_blank"></a>
+    <a i-carbon-logo-github text-zinc-600 href="https://github.com/widcardw/Compilation-principle" target="_blank"></a>
   </div>
 </template>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
-
-.m-1 {
-  margin: 0 10px;
-  font-size: 20px;
-  color: grey
-}
 </style>

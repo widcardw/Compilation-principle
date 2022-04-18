@@ -1,18 +1,16 @@
 import LexicalResult from "../LexicalResult";
 import Token from "../static/Token";
+import { OPERATORS } from '../static/sets';
 
-const operators = new Set([
-    '+', "-", "*", "/", "%", "=", "<", ">", "!", "&", "|", "^", "~", "?", ":"
-])
 
 const processOperator = (str: string, strIndex: number): LexicalResult => {
     let pr: LexicalResult = {
         value: "",
         strIndex: strIndex,
-        type: Token.UNKNOWN
+        type: Token.NONE
     };
     let ch = str.charAt(strIndex);
-    if (operators.has(ch)) {
+    if (OPERATORS.has(ch)) {
         pr.value = ch;
         pr.strIndex++;
         pr.type = Token.OPERATOR;

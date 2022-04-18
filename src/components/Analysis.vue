@@ -17,7 +17,7 @@ const analyze = () => {
   <div lg:flex lg:justify-center>
     <n-card title="输入代码">
       <template #header-extra>
-        <n-button @click="analyze">分析</n-button>
+        <n-button @click="analyze" :disabled="inputCode.trim() === ''">分析</n-button>
       </template>
       <n-input v-model:value="inputCode" type="textarea" placeholder="请输入代码" clearable class="code" />
     </n-card>

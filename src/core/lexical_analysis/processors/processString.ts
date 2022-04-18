@@ -5,7 +5,7 @@ const processString = (str: string, strIndex: number): LexicalResult => {
     let pr: LexicalResult = {
         value: "",
         strIndex: strIndex,
-        type: Token.UNKNOWN
+        type: Token.NONE
     }
     if (str.charAt(pr.strIndex) == '"') {
         pr.value += str.charAt(pr.strIndex);

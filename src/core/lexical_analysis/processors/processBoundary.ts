@@ -1,18 +1,16 @@
 import LexicalResult from "../LexicalResult";
 import Token from "../static/Token";
+import { BOUNDARIES } from "../static/sets";
 
-const boundaries = new Set([
-    '(', ')', '[', ']', '{', '}', ',', ';', ':'
-])
 
 const processBoundary = (str: string, strIndex: number): LexicalResult => {
     let pr: LexicalResult = {
         value: "",
         strIndex: strIndex,
-        type: Token.UNKNOWN
+        type: Token.NONE
     }
     let ch = str.charAt(pr.strIndex)
-    if (boundaries.has(ch)) {
+    if (BOUNDARIES.has(ch)) {
         pr.value += ch;
         pr.strIndex++;
         pr.type = Token.BOUNDARY;

@@ -6,7 +6,7 @@ const processNumber = (str: string, strIndex: number): LexicalResult => {
     let pr: LexicalResult = {
         value: "",
         strIndex: strIndex,
-        type: Token.UNKNOWN
+        type: Token.NONE
     }
     let ch = str.charAt(pr.strIndex);
     if (isNumber(ch)) {

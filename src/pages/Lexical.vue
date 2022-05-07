@@ -32,7 +32,7 @@ const closeNoti = () => {
 </script>
 
 <template>
-  <div lg:flex lg:justify-center space-x-4>
+  <div lg:flex lg:justify-center>
     <!-- 左边代码输入块 -->
     <div
       border="~ rounded gray-200 dark:gray-700"

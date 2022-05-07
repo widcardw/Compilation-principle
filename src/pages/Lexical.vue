@@ -43,7 +43,7 @@ const closeNoti = () => {
         <span class="text-sm my-3">
           输入代码
         </span>
-        <button class="text-sm btn my-2" @click="analyzeCode">
+        <button class="text-sm btn my-2" :disabled="inputCode.trim().length === 0" @click="analyzeCode">
           分析
         </button>
       </div>

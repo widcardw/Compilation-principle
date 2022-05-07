@@ -13,7 +13,15 @@ const emits = defineEmits(['mark-read', 'close-notification'])
 </script>
 
 <template>
-  <div border="~ rounded gray-200 dark:gray-700" :style="{width: width}" p="x-4 y-4" fixed top-4 right-4 bg-white shadow>
+  <div
+    border="~ rounded gray-200 dark:gray-700"
+    :style="{width: width}"
+    p="x-4 y-4"
+    fixed
+    top-4 right-4
+    bg-white dark:bg-black
+    shadow
+  >
     <div flex justify-between>
       <h2>{{ title }}</h2>
       <button i-carbon-close @click="emits('close-notification')" />

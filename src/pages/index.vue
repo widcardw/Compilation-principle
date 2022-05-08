@@ -1,28 +1,92 @@
 <script setup lang="ts">
+import { createTextVNode } from 'vue'
+import type DataColumn from '~/types/DataColumn'
 
 const router = useRouter()
+
+interface Experiment {
+  no: number
+  name: string
+  optional: boolean
+  description: string
+  url: string
+}
+
+const experiments: Experiment[] = [
+  {
+    no: 1,
+    name: '词法分析',
+    optional: false,
+    description: '从源代码中分离出合法的单词，包括标识符、整数、保留字等，采用文法和有限自动机等方式实现',
+    url: 'Lexical',
+  },
+  {
+    no: 2,
+    name: '不确定有限自动机的确定化',
+    optional: true,
+    description: '由文法生成不确定的有限自动机，然后确定化',
+    url: '',
+  }, {
+    no: 3,
+    name: '自顶向下的预测分析',
+    optional: false,
+    description: '实现由文法求 First 和 Follow 集，最后得到预测分析表，并实现简单的语法结构',
+    url: '',
+  },
+  {
+    no: 4,
+    name: '算符优先文法实现表达式求值',
+    optional: false,
+    description: '由算符优先文法求出优先矩阵，然后分析表达式的合法性并求出值',
+    url: '',
+  },
+  {
+    no: 5,
+    name: 'SLR(1) 文法算法',
+    optional: true,
+    description: '构造 SLR(1) 分析表，并识别句子',
+    url: '',
+  },
+  {
+    no: 6,
+    name: '语义分析',
+    optional: true,
+    description: '由简单文法得到语义文法',
+    url: '',
+  },
+]
+
+const column: DataColumn[] = [
+  { key: 'no', label: '编号' },
+  {
+    key: 'name',
+    label: '名称',
+    render: (row: Experiment) => {
+      if (row.url !== '') {
+        return h(
+          'button',
+          {
+            class: 'underline decoration-teal-600 decoration-dashed hover:text-teal-600',
+            onclick: () => { router.push(`/${row.url}`) },
+          },
+          { default: () => row.name },
+        )
+      }
+      return createTextVNode(row.name)
+    },
+  },
+  { key: 'optional', label: '可选', render: (row: Experiment) => createTextVNode(row.optional ? '可选' : '必做') },
+  { key: 'description', label: '描述' },
+]
 
 </script>
 
 <template>
   <div>
-    <div i-carbon-campsite text-4xl inline-block />
+    <a href="https://github.com/antfu/vitesse-lite" i-carbon-campsite text-4xl inline-block />
     <p>
-      <a rel="noreferrer" href="https://github.com/antfu/vitesse-lite" target="_blank">
-        Vitesse Lite
-      </a>
+      编译原理实验
     </p>
-    <p>
-      <em text-sm op75>Opinionated Vite Starter Template</em>
-    </p>
-
-    <div>
-      <button
-        class="m-3 text-sm btn"
-        @click="router.push('Lexical')"
-      >
-        词法分析
-      </button>
-    </div>
+    <data-table :column="column" :data="experiments" style="max-width: 1000px; margin: 1rem auto" text-sm />
   </div>
 </template>

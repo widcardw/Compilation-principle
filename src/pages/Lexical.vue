@@ -1,14 +1,30 @@
 <script setup lang="ts">
 import lexialAnalysisProcess from '~/core/lexical_analysis/lexialAnalysisProcess'
 import type LexicalResult from '~/core/lexical_analysis/LexicalResult'
-import DataTable from '~/components/DataTable.vue'
 import Notification from '~/components/Notification.vue'
+import type DataColumn from '~/types/DataColumn'
+import ColorMap from '~/core/lexical_analysis/static/ColorMap'
+import type Token from '~/core/lexical_analysis/static/Token'
 
 let inputCode = $ref('')
 let lexicalResult = $ref<LexicalResult[]>([])
 
 let notificationRead = $ref(false)
 let notificationShown = $ref(false)
+
+const column: DataColumn[] = [
+  { key: 'type', label: '类型', width: '30%' },
+  {
+    key: 'value',
+    label: '值',
+    width: '70%',
+    render: (v: LexicalResult) => h(
+      'span',
+      { style: { color: ColorMap.get(v?.type as Token), fontFamily: '\'Fira Code\', \'Courier New\', Courier, monospace' } },
+      { default: () => v.value },
+    ),
+  },
+]
 
 const tabKeyDown = (e: Event) => {
   inputCode += '\t'
@@ -66,7 +82,7 @@ const closeNoti = () => {
       border="~ rounded gray-200 dark:gray-700"
       class="lg:w-1\/2 "
     >
-      <DataTable :columns="['类型', '值']" :data="lexicalResult" />
+      <DataTable :column="column" :data="lexicalResult" />
     </div>
   </div>
   <Notification

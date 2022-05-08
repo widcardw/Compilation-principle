@@ -21,6 +21,8 @@ const emits = defineEmits(['mark-read', 'close-notification'])
     top-4 right-4
     bg-white dark:bg-black
     shadow
+    animate-bounce-in-right
+    animate-count-1
   >
     <div flex justify-between>
       <h2>{{ title }}</h2>

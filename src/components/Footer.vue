@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { isDark, toggleDark } from '~/composables'
+
+const emits = defineEmits(['naive-dark-theme-toggle'])
+
+const toggleGlobalDark = () => {
+  toggleDark()
+  emits('naive-dark-theme-toggle', isDark)
+}
+
 </script>
 
 <template>
   <nav text-xl mt-6 inline-flex gap-2>
-    <button class="icon-btn !outline-none" @click="toggleDark()">
+    <button class="icon-btn !outline-none" @click="toggleGlobalDark">
       <div v-if="isDark" i-carbon-moon />
       <div v-else i-carbon-sun />
     </button>

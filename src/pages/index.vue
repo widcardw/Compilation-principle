@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { createTextVNode } from 'vue'
-import type DataColumn from '~/types/DataColumn'
+import type { DataTableColumns } from 'naive-ui'
+import { NDataTable } from 'naive-ui'
 
 const router = useRouter()
 
@@ -31,7 +32,7 @@ const experiments: Experiment[] = [
     name: '自顶向下的预测分析',
     optional: false,
     description: '实现由文法求 First 和 Follow 集，最后得到预测分析表，并实现简单的语法结构',
-    url: '',
+    url: 'TopDown',
   },
   {
     no: 4,
@@ -56,11 +57,11 @@ const experiments: Experiment[] = [
   },
 ]
 
-const column: DataColumn[] = [
-  { key: 'no', label: '编号' },
+const columns: DataTableColumns<Experiment> = [
+  { key: 'no', title: '编号' },
   {
     key: 'name',
-    label: '名称',
+    title: '名称',
     render: (row: Experiment) => {
       if (row.url !== '') {
         return h(
@@ -75,8 +76,8 @@ const column: DataColumn[] = [
       return createTextVNode(row.name)
     },
   },
-  { key: 'optional', label: '可选', render: (row: Experiment) => createTextVNode(row.optional ? '可选' : '必做') },
-  { key: 'description', label: '描述' },
+  { key: 'optional', title: '可选', render: (row: Experiment) => createTextVNode(row.optional ? '可选' : '必做') },
+  { key: 'description', title: '描述' },
 ]
 
 </script>
@@ -87,6 +88,6 @@ const column: DataColumn[] = [
     <p>
       编译原理实验
     </p>
-    <data-table :column="column" :data="experiments" style="max-width: 1000px; margin: 1rem auto" text-sm />
+    <n-data-table :columns="columns" :data="experiments" max-w-1000px m-auto />
   </div>
 </template>

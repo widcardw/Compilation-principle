@@ -1,22 +1,39 @@
 <script setup lang="ts">
+import type { DataTableColumns } from 'naive-ui'
+import { NButton, NCard, NDataTable, NInput, useNotification } from 'naive-ui'
 import lexialAnalysisProcess from '~/core/lexical_analysis/lexialAnalysisProcess'
 import type LexicalResult from '~/core/lexical_analysis/LexicalResult'
-import Notification from '~/components/Notification.vue'
-import type DataColumn from '~/types/DataColumn'
 import ColorMap from '~/core/lexical_analysis/static/ColorMap'
 import type Token from '~/core/lexical_analysis/static/Token'
 
 let inputCode = $ref('')
 let lexicalResult = $ref<LexicalResult[]>([])
 
-let notificationRead = $ref(false)
-let notificationShown = $ref(false)
+const notification = useNotification()
 
-const column: DataColumn[] = [
-  { key: 'type', label: '类型', width: '30%' },
+let markAsRead = $ref(false)
+const n = notification.create({
+  title: '注意',
+  content: '若页面卡顿，请关闭页面！',
+  action: () => h(
+    NButton,
+    {
+      text: true,
+      type: 'primary',
+      onClick: () => {
+        markAsRead = true
+        n.destroy()
+      },
+    },
+    { default: () => '已读' },
+  ),
+})
+
+const columns: DataTableColumns<LexicalResult> = [
+  { key: 'type', title: '类型', width: '30%' },
   {
     key: 'value',
-    label: '值',
+    title: '值',
     width: '70%',
     render: (v: LexicalResult) => h(
       'span',
@@ -32,64 +49,31 @@ const tabKeyDown = (e: Event) => {
 }
 
 const analyzeCode = () => {
-  if (!notificationRead)
-    notificationShown = true
   lexicalResult = lexialAnalysisProcess(`${inputCode}\n`)
 }
 
-const markRead = () => {
-  notificationRead = true
-  notificationShown = false
-}
-
-const closeNoti = () => {
-  notificationShown = false
-}
 </script>
 
 <template>
   <div lg:flex lg:justify-center>
     <!-- 左边代码输入块 -->
-    <div
-      border="~ rounded gray-200 dark:gray-700"
-      class="lg:w-1\/2 "
-      p="x-4 y-2"
-    >
-      <div justify-between flex>
-        <span class="text-sm my-3">
-          输入代码
-        </span>
-        <button class="text-sm btn my-2" :disabled="inputCode.trim().length === 0" @click="analyzeCode">
+    <n-card title="输入代码" text-left>
+      <template #header-extra>
+        <n-button :disabled="inputCode.trim().length === 0" @click="analyzeCode">
           分析
-        </button>
-      </div>
-      <div>
-        <textarea
-          v-model="inputCode"
-          font-mono
-          border="~ rounded gray-200 dark:gray-700"
-          outline="none active:none"
-          w-full
-          h-full
-          min-h-60
-          p="x-4 y-2"
-          @keydown.tab="tabKeyDown"
-        />
-      </div>
-    </div>
+        </n-button>
+      </template>
+      <n-input
+        v-model:value="inputCode"
+        font-mono
+        h-full
+        min-h-60
+        type="textarea"
+        @keydown.tab="tabKeyDown"
+      />
+    </n-card>
     <!-- 右边分析块 -->
-    <div
-      border="~ rounded gray-200 dark:gray-700"
-      class="lg:w-1\/2 "
-    >
-      <DataTable :column="column" :data="lexicalResult" />
-    </div>
+    <n-data-table :columns="columns" :data="lexicalResult" />
   </div>
-  <Notification
-    v-if="notificationShown"
-    :title="'注意'"
-    :content="'若页面卡顿，请关闭页面！'"
-    @mark-read="markRead"
-    @close-notification="closeNoti"
-  />
 </template>
+

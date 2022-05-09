@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DataTableColumns } from 'naive-ui'
 import { NButton, NCard, NDataTable, NDynamicInput, NDynamicTags, NTag, useMessage } from 'naive-ui'
+import type { Ref } from 'vue'
 import getFirstSets from '~/core/top_down_pre/getFirstSets'
 import getFollowSets from '~/core/top_down_pre/getFollowSets'
 import preProcessLaws from '~/core/top_down_pre/preProcessLaws'
@@ -29,7 +30,8 @@ const terminators = $ref<string[]>([EMPTY, '+', '*', '(', ')', 'id'])
 const nonTerminators = $ref<string[]>(['E', 'T', 'F', 'T\'', 'E\''])
 let firstSets = $ref<Record<string, string[]>>()
 let followSets = $ref<Record<string, string[]>>()
-const firstColumns = $ref<DataTableColumns<Pair<string, string[]>>>([
+
+const firstColumns = ref<DataTableColumns<Pair<string, string[]>>>([
   {
     key: 'key',
     title: '符号',
@@ -56,9 +58,9 @@ const firstColumns = $ref<DataTableColumns<Pair<string, string[]>>>([
       })
     },
   },
-])
+]) as Ref<DataTableColumns<Pair<string, string[]>>>
 
-const followColumns = $ref<DataTableColumns<Pair<string, string[]>>>([
+const followColumns = ref<DataTableColumns<Pair<string, string[]>>>([
   {
     key: 'key',
     title: '符号',
@@ -85,7 +87,7 @@ const followColumns = $ref<DataTableColumns<Pair<string, string[]>>>([
       })
     },
   },
-])
+]) as Ref<DataTableColumns<Pair<string, string[]>>>
 
 const analyzeLaw = () => {
   const realLaws: Law[] = preProcessLaws(laws)

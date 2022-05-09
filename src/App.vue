@@ -26,3 +26,9 @@ const toggleNaiveTheme = (isDark: Ref<boolean>) => {
     </n-notification-provider>
   </n-config-provider>
 </template>
+
+<style>
+.n-button {
+  background-color: var(--n-color);
+}
+</style>

@@ -80,11 +80,19 @@ const renderHead = () => {
 </script>
 
 <template>
-  <table v-if="data.length > 0" border-collapse w-full>
+  <table
+    v-if="data.length > 0"
+    border-collapse
+    w-full
+    border="~ rounded gray-200"
+  >
     <render-head />
     <render-body />
   </table>
-  <div v-else>
+  <div
+    v-else
+    border="~ rounded gray-200"
+  >
     <div i-carbon-earth color="gray-500" text-8xl m-auto mt-20 />
     <div color="gray-500" mb-20>
       暂无数据

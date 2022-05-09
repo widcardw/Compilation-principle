@@ -2,8 +2,11 @@
 import type { DataTableColumns } from 'naive-ui'
 import { NButton, NCard, NDataTable, NDynamicInput, NDynamicTags, NTag, useMessage } from 'naive-ui'
 import type { Ref } from 'vue'
+import { createTextVNode } from 'vue'
 import getFirstSets from '~/core/top_down_pre/getFirstSets'
 import getFollowSets from '~/core/top_down_pre/getFollowSets'
+import getPredictiveTable from '~/core/top_down_pre/getPredictiveTable'
+import getSelectSets from '~/core/top_down_pre/getSelectSets'
 import preProcessLaws from '~/core/top_down_pre/preProcessLaws'
 import type { Law, Pair } from '~/core/top_down_pre/static'
 import { EMPTY, recordToArray } from '~/core/top_down_pre/static'
@@ -24,12 +27,16 @@ const laws = $ref<Pair<string, string>[]>([{
 }, {
   key: 'F',
   value: '( E ) | id',
+}, {
+  key: 'S',
+  value: 'E',
 }])
 
 const terminators = $ref<string[]>([EMPTY, '+', '*', '(', ')', 'id'])
-const nonTerminators = $ref<string[]>(['E', 'T', 'F', 'T\'', 'E\''])
+const nonTerminators = $ref<string[]>(['E', 'T', 'E\'', 'T\'', 'F', 'S'])
 let firstSets = $ref<Record<string, string[]>>()
 let followSets = $ref<Record<string, string[]>>()
+let pTable = $ref<Array<Array<string | Law>>>([])
 
 const firstColumns = ref<DataTableColumns<Pair<string, string[]>>>([
   {
@@ -89,11 +96,30 @@ const followColumns = ref<DataTableColumns<Pair<string, string[]>>>([
   },
 ]) as Ref<DataTableColumns<Pair<string, string[]>>>
 
+const predictiveCell = (cellValue: string | Law) => {
+  if (typeof cellValue === 'string') {
+    if (cellValue.trim() !== '')
+      return h('span', {}, { default: () => cellValue })
+    else return createTextVNode('')
+  }
+
+  else {
+    return h('div', {}, {
+      default: () => {
+        const { left, right } = cellValue
+        return `${left} → ${right.join(' ')}`
+      },
+    })
+  }
+}
+
 const analyzeLaw = () => {
   const realLaws: Law[] = preProcessLaws(laws)
   try {
     firstSets = getFirstSets(terminators, nonTerminators, realLaws)
     followSets = getFollowSets(terminators, nonTerminators, realLaws, firstSets)
+    const selectSets = getSelectSets(terminators, nonTerminators, realLaws, firstSets, followSets)
+    pTable = getPredictiveTable(terminators, nonTerminators, realLaws, selectSets)
   }
   catch (e: any) {
     message.warning(e.message)
@@ -131,4 +157,5 @@ const analyzeLaw = () => {
   </div>
   <n-data-table :columns="firstColumns" :data="recordToArray(firstSets)" />
   <n-data-table :columns="followColumns" :data="recordToArray(followSets)" />
+  <no-tem-table :data="pTable" :cell-template="predictiveCell" />
 </template>

@@ -12,7 +12,7 @@ const toggleGlobalDark = () => {
 
 <template>
   <nav text-xl mt-6 inline-flex gap-2>
-    <button class="icon-btn !outline-none" @click="toggleGlobalDark">
+    <button class="icon-btn !outline-none" bg-transparent @click="toggleGlobalDark">
       <div v-if="isDark" i-carbon-moon />
       <div v-else i-carbon-sun />
     </button>

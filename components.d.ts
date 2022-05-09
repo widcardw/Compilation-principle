@@ -7,6 +7,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     DataTable: typeof import('./src/components/DataTable.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
+    NoTemTable: typeof import('./src/components/NoTemTable.vue')['default']
     Notification: typeof import('./src/components/Notification.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

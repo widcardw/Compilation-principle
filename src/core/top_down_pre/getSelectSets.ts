@@ -15,8 +15,12 @@ const getSelectSets = (
       continue
 
     if (nonTerminators.includes(right[0])) {
-      const firstSet = firstSets[right[0]]
+      const firstSet = Array.from(firstSets[right[0]])
       selectSets[JSON.stringify(law)] = firstSet
+      if (firstSet.includes(EMPTY)) {
+        const followSet = Array.from(followSets[right[0]])
+        selectSets[JSON.stringify(law)].push(...followSet)
+      }
     }
     else if (terminators.includes(right[0])) {
       if (right[0] !== EMPTY)

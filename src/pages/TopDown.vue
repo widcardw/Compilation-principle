@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { DataTableColumns } from 'naive-ui'
-import { NButton, NCard, NDataTable, NDynamicInput, NDynamicTags, NTag, useMessage } from 'naive-ui'
-import type { Ref } from 'vue'
+import { NButton, NCard, NDataTable, NDynamicInput, NDynamicTags, useMessage } from 'naive-ui'
 import { createTextVNode } from 'vue'
 import getFirstSets from '~/core/top_down_pre/getFirstSets'
 import getFollowSets from '~/core/top_down_pre/getFollowSets'
@@ -9,107 +7,51 @@ import getPredictiveTable from '~/core/top_down_pre/getPredictiveTable'
 import getSelectSets from '~/core/top_down_pre/getSelectSets'
 import preProcessLaws from '~/core/top_down_pre/preProcessLaws'
 import type { Law, Pair } from '~/core/top_down_pre/static'
-import { EMPTY, recordToArray } from '~/core/top_down_pre/static'
+import { recordToArray } from '~/core/top_down_pre/static'
+import { createFirstSetColumnTemplate } from '~/core/top_down_pre/useFirstTemplate'
+import { createFollowSetColumnTemplate } from '~/core/top_down_pre/useFollowTemplate'
+import { gramma2 } from '~/core/top_down_pre/sample_laws'
 
 const message = useMessage()
-const laws = $ref<Pair<string, string>[]>([{
-  key: 'E',
-  value: 'T E\'',
-}, {
-  key: 'E\'',
-  value: '+ T E\' | @empty',
-}, {
-  key: 'T',
-  value: 'F T\'',
-}, {
-  key: 'T\'',
-  value: '* F T\' | @empty',
-}, {
-  key: 'F',
-  value: '( E ) | id',
-}, {
-  key: 'S',
-  value: 'E',
-}])
+const laws = $ref<Pair<string, string>[]>(gramma2.laws)
 
-const terminators = $ref<string[]>([EMPTY, '+', '*', '(', ')', 'id'])
-const nonTerminators = $ref<string[]>(['E', 'T', 'E\'', 'T\'', 'F', 'S'])
+const terminators = $ref<string[]>(gramma2.terminators)
+const nonTerminators = $ref<string[]>(gramma2.nonTerminators)
 let firstSets = $ref<Record<string, string[]>>()
 let followSets = $ref<Record<string, string[]>>()
-let pTable = $ref<Array<Array<string | Law>>>([])
+let pTable = $ref<Array<Array<string | Array<string | Law>>>>([])
 
-const firstColumns = ref<DataTableColumns<Pair<string, string[]>>>([
-  {
-    key: 'key',
-    title: '符号',
-    defaultFilterOptionValues: ['non-terminator'],
-    filterOptions: [
-      { label: '非终结符', value: 'non-terminator' },
-      { label: '终结符', value: 'terminator' },
-    ],
-    filter: (value, row) => {
-      return (value === 'terminator'
-        ? terminators.includes(row.key)
-        : false)
-              || (value === 'non-terminator'
-                ? nonTerminators.includes(row.key)
-                : false)
-    },
-  },
-  {
-    key: 'value',
-    title: 'First 集',
-    render: (row) => {
-      return row.value.map((v) => {
-        return h(NTag, { style: { marginRight: '6px' } }, { default: () => v })
-      })
-    },
-  },
-]) as Ref<DataTableColumns<Pair<string, string[]>>>
+const firstColumns = computed(() => {
+  return createFirstSetColumnTemplate(terminators, nonTerminators)
+})
 
-const followColumns = ref<DataTableColumns<Pair<string, string[]>>>([
-  {
-    key: 'key',
-    title: '符号',
-    defaultFilterOptionValues: ['non-terminator'],
-    filterOptions: [
-      { label: '非终结符', value: 'non-terminator' },
-      { label: '终结符', value: 'terminator' },
-    ],
-    filter: (value, row) => {
-      return (value === 'terminator'
-        ? terminators.includes(row.key)
-        : false)
-              || (value === 'non-terminator'
-                ? nonTerminators.includes(row.key)
-                : false)
-    },
-  },
-  {
-    key: 'value',
-    title: 'Follow 集',
-    render: (row) => {
-      return row.value.map((v) => {
-        return h(NTag, { style: { marginRight: '6px' } }, { default: () => v })
-      })
-    },
-  },
-]) as Ref<DataTableColumns<Pair<string, string[]>>>
+const followColumns = computed(() => {
+  return createFollowSetColumnTemplate(terminators, nonTerminators)
+})
 
-const predictiveCell = (cellValue: string | Law) => {
+const predictiveCell = (cellValue: string | Array<string | Law>) => {
   if (typeof cellValue === 'string') {
     if (cellValue.trim() !== '')
-      return h('span', {}, { default: () => cellValue })
-    else return createTextVNode('')
+      return createTextVNode(cellValue)
+    else
+      return createTextVNode('')
   }
-
   else {
-    return h('div', {}, {
-      default: () => {
-        const { left, right } = cellValue
-        return `${left} → ${right.join(' ')}`
-      },
-    })
+    return h('div', {},
+      cellValue.map((it) => {
+        if (typeof it === 'string') {
+          return it
+        }
+        else {
+          return h('div', {}, {
+            default: () => {
+              const { left, right } = it
+              return `${left} → ${right.join(' ')}`
+            },
+          })
+        }
+      }),
+    )
   }
 }
 

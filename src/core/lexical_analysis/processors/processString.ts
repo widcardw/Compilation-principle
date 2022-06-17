@@ -1,28 +1,28 @@
-import LexicalResult from "../LexicalResult";
-import Token from "../static/Token";
+import type LexicalResult from '../LexicalResult'
+import Token from '../static/Token'
 
 const processString = (str: string, strIndex: number): LexicalResult => {
-    let pr: LexicalResult = {
-        value: "",
-        strIndex: strIndex,
-        type: Token.NONE
+  const pr: LexicalResult = {
+    value: '',
+    strIndex,
+    type: Token.NONE,
+  }
+  if (str.charAt(pr.strIndex) === '"') {
+    pr.value += str.charAt(pr.strIndex)
+    pr.strIndex++
+    let ch = str.charAt(pr.strIndex)
+    while (pr.strIndex < str.length && ch !== '"') {
+      pr.value += ch
+      pr.strIndex++
+      ch = str.charAt(pr.strIndex)
     }
-    if (str.charAt(pr.strIndex) == '"') {
-        pr.value += str.charAt(pr.strIndex);
-        pr.strIndex++;
-        let ch = str.charAt(pr.strIndex);
-        while (pr.strIndex < str.length && ch !== '"') {
-            pr.value += ch;
-            pr.strIndex++;
-            ch = str.charAt(pr.strIndex);
-        }
-        if (ch === '"') {
-            pr.value += ch;
-            pr.strIndex++;
-            pr.type = Token.STRING;
-        }
+    if (ch === '"') {
+      pr.value += ch
+      pr.strIndex++
+      pr.type = Token.STRING
     }
-    return pr;
+  }
+  return pr
 }
 
 export default processString

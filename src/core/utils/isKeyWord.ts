@@ -1,5 +1,5 @@
-import KeyWords from "../lexical_analysis/static/KeyWords";
+import KeyWords from '../lexical_analysis/static/KeyWords'
 
 export default (word: string): boolean => {
-    return KeyWords.has(word);
+  return KeyWords.has(word)
 }

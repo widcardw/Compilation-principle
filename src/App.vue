@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import type { GlobalTheme } from 'naive-ui'
 import { NConfigProvider, NMessageProvider, NNotificationProvider, darkTheme } from 'naive-ui'
-import type { Ref } from 'vue'
+import { isDark } from '~/composables'
 
 let theme = $ref<GlobalTheme | null>(null)
 
-const toggleNaiveTheme = (isDark: Ref<boolean>) => {
+const toggleNaiveTheme = () => {
   if (isDark.value)
     theme = darkTheme
   else
     theme = null
 }
+
+onMounted(toggleNaiveTheme)
 
 </script>
 

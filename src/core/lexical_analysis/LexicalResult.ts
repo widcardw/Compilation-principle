@@ -1,7 +1,7 @@
-import Token from "./static/Token";
+import type Token from './static/Token'
 
 export default interface LexicalResult {
-    type: Token;
-    value: string;
-    strIndex: number;
+  type: Token
+  value: string
+  strIndex: number
 }

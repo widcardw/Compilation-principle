@@ -23,7 +23,7 @@ const renderRow = (row: any[], index: number) => {
     'tr',
     {
       class: index % 2 === 0
-        ? 'bg-gray-100 dark:bg-gray-800'
+        ? 'bg-zinc-100 dark:bg-zinc-800'
         : '',
     },
     res,
@@ -37,7 +37,7 @@ const renderBody = () => {
 
 const renderHeadCell = (value: any) => {
   const cl = {
-    'bg-gray-200 dark:bg-gray-700': true,
+    'bg-zinc-200 dark:bg-zinc-700': true,
     'px-4': true,
     'py-2': true,
   }
@@ -58,17 +58,17 @@ const renderHead = () => {
 <template>
   <table
     v-if="data.length > 0" border-collapse w-full
-    border="~ rounded gray-200 dark:gray-700"
+    border="~ rounded zinc-200 dark:zinc-700"
   >
     <render-head />
     <render-body />
   </table>
   <div
     v-else
-    border="~ rounded gray-200 dark:gray-700"
+    border="~ rounded zinc-200 dark:zinc-700"
   >
-    <div i-carbon-earth color="gray-500" text-8xl m-auto mt-20 />
-    <div color="gray-500" mb-20>
+    <div i-carbon-earth color="zinc-500" text-8xl m-auto mt-20 />
+    <div color="zinc-500" mb-20>
       暂无数据
     </div>
   </div>

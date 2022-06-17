@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DataTableColumns } from 'naive-ui'
-import { NButton, NCard, NDataTable, NInput, useNotification } from 'naive-ui'
+import { NButton, NCard, NDataTable, useNotification } from 'naive-ui'
 import lexialAnalysisProcess from '~/core/lexical_analysis/lexialAnalysisProcess'
 import type LexicalResult from '~/core/lexical_analysis/LexicalResult'
 import ColorMap from '~/core/lexical_analysis/static/ColorMap'
@@ -8,6 +8,7 @@ import type Token from '~/core/lexical_analysis/static/Token'
 
 let inputCode = $ref('')
 let lexicalResult = $ref<LexicalResult[]>([])
+const inputRef = $ref<HTMLInputElement>()
 
 const notification = useNotification()
 
@@ -44,7 +45,14 @@ const columns: DataTableColumns<LexicalResult> = [
 ]
 
 const tabKeyDown = (e: Event) => {
-  inputCode += '\t'
+  const sel = (e.target as HTMLInputElement).selectionEnd ?? 0
+  inputCode = `${inputCode.slice(0, sel)}\t${inputCode.slice(sel)}`
+  nextTick(() => {
+    inputRef.focus()
+    inputRef.setSelectionRange(sel + 1, sel + 1)
+  })
+
+  // inputCode += '\t'
   e.preventDefault()
 }
 
@@ -63,12 +71,17 @@ const analyzeCode = () => {
           分析
         </n-button>
       </template>
-      <n-input
-        v-model:value="inputCode"
+      <textarea
+        ref="inputRef"
+        v-model="inputCode"
+        border="~ rounded gray-200 dark:gray-700 focus:teal-600"
+        shadow="focus:md"
+        p-2
         font-mono
+        outline-none
+        w-full
         h-full
         min-h-60
-        type="textarea"
         @keydown.tab="tabKeyDown"
       />
     </n-card>

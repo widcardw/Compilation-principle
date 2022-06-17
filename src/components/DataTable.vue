@@ -40,7 +40,7 @@ const renderRow = (row: any, index: number) => {
     'tr',
     {
       class: index % 2 === 1
-        ? 'bg-gray-100 dark:bg-gray-800'
+        ? 'bg-zinc-100 dark:bg-zinc-800'
         : '',
     },
     res,
@@ -60,7 +60,7 @@ const renderHeadCell = (col: DataColumn) => {
         width: col.width,
       },
       class: {
-        'bg-gray-200 dark:bg-gray-700': true,
+        'bg-zinc-200 dark:bg-zinc-700': true,
         'px-4': true,
         'py-2': true,
       },
@@ -84,14 +84,14 @@ const renderHead = () => {
     v-if="data.length > 0"
     border-collapse
     w-full
-    border="~ rounded gray-200"
+    border="~ rounded zinc-200"
   >
     <render-head />
     <render-body />
   </table>
   <div
     v-else
-    border="~ rounded gray-200"
+    border="~ rounded zinc-200"
   >
     <div i-carbon-earth color="gray-500" text-8xl m-auto mt-20 />
     <div color="gray-500" mb-20>
